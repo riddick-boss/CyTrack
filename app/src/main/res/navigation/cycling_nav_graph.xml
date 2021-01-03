@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cycling_nav_graph"
+    app:startDestination="@id/CyclingAddRideFragment">
+    <fragment
+        android:id="@id/CyclingStatsFragment"
+        android:label="@string/cycling_stats"
+        android:name="abandonedstudio.app.cytrack.ui.cyclingstats.CyclingStatsFragment"
+        tools:layout="@layout/cycling_stats_fragment" />
+    <fragment
+        android:id="@id/CyclingCalendarFragment"
+        android:label="@string/calendar"
+        android:name="abandonedstudio.app.cytrack.ui.cyclingcalendar.CyclingCalendarFragment"
+        tools:layout="@layout/cycling_calendar_fragment" />
+    <fragment
+        android:id="@+id/CyclingAddRideFragment"
+        android:label="@string/add_ride"
+        android:name="abandonedstudio.app.cytrack.ui.cyclingaddride.CyclingAddRideFragment"
+        tools:layout="@layout/cycling_add_ride_fragment" />
+</navigation>
