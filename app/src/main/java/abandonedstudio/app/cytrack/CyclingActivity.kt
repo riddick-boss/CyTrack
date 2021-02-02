@@ -11,7 +11,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CyclingActivity : AppCompatActivity() {
 
     private lateinit var cyclingAppBarConfiguration: AppBarConfiguration

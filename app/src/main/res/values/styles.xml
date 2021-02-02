@@ -7,7 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="MyAppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="MyAppTheme" parent="Theme.MaterialComponents.NoActionBar">
 
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
