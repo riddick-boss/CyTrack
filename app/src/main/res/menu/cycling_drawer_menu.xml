@@ -14,7 +14,7 @@
             android:title="@string/cycling_stats" />
 
         <item
-            android:id="@+id/CyclingCalendarFragment"
+            android:id="@+id/CyclingMapFragment"
             android:title="@string/calendar"
             android:icon="@drawable/ic_baseline_event_24" />
 

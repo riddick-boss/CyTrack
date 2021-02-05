@@ -10,10 +10,10 @@
         android:name="abandonedstudio.app.cytrack.ui.cyclingstats.CyclingStatsFragment"
         tools:layout="@layout/cycling_stats_fragment" />
     <fragment
-        android:id="@id/CyclingCalendarFragment"
+        android:id="@id/CyclingMapFragment"
         android:label="@string/calendar"
-        android:name="abandonedstudio.app.cytrack.ui.cyclingcalendar.CyclingCalendarFragment"
-        tools:layout="@layout/cycling_calendar_fragment" />
+        android:name="abandonedstudio.app.cytrack.ui.cyclingcalendar.CyclingMapFragment"
+        tools:layout="@layout/cycling_map_fragment" />
     <fragment
         android:id="@+id/CyclingAddRideFragment"
         android:label="@string/add_ride"

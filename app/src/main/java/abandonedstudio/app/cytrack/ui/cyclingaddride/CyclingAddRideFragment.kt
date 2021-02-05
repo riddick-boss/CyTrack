@@ -2,7 +2,7 @@ package abandonedstudio.app.cytrack.ui.cyclingaddride
 
 import abandonedstudio.app.cytrack.R
 import abandonedstudio.app.cytrack.databinding.CyclingAddRideFragmentBinding
-import abandonedstudio.app.cytrack.model.CyclingRideRepository
+import abandonedstudio.app.cytrack.model.CyclingRide
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +12,6 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.CompositeDateValidator
 import com.google.android.material.datepicker.DateValidatorPointBackward
@@ -23,13 +22,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class CyclingAddRideFragment : Fragment(R.layout.cycling_add_ride_fragment) {
+class CyclingAddRideFragment : Fragment() {
 
     private val viewModel: CyclingAddRideViewModel by viewModels()
 //    private lateinit var binding: CyclingAddRideFragmentBinding
 //    private val binding by viewBinding (CyclingAddRideFragmentBinding::bind)
     private var _binding: CyclingAddRideFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private var distance = 0.0f
+    private var duration = 0
+    private var rideDate = System.currentTimeMillis()
+    private var destination = ""
 
 //    override fun onCreateView(
 //        inflater: LayoutInflater,
@@ -55,11 +59,13 @@ class CyclingAddRideFragment : Fragment(R.layout.cycling_add_ride_fragment) {
         //set min and max values for number pickers
         setNumberPickers()
 
-        //set autoCompleteEditText array for adapter and adapter
-        // TODO: set adapter array as query from database
-        val items = listOf("ccc", "ggg", "ddd")
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.select_dialog_item, items)
-        (binding.cyclingAddDestinationEditText.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+        //set autoCompleteEditText adapter and array for adapter as query from database
+        viewModel.distinctDestinations.observe(viewLifecycleOwner, {
+            (binding.cyclingAddDestinationEditText.editText as? AutoCompleteTextView)?.setAdapter(ArrayAdapter(requireContext(), android.R.layout.select_dialog_item, it))
+        })
+//        val items = listOf("aa", "bb")
+//        val adapter = ArrayAdapter(requireContext(), android.R.layout.select_dialog_item, items)
+//        (binding.cyclingAddDestinationEditText.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
         // Creating the MaterialDatePicker builder, setting the title, applying validator (past dates;today> and setting actions OnCLick
         val datePicker = MaterialDatePicker.Builder.datePicker()
@@ -72,12 +78,12 @@ class CyclingAddRideFragment : Fragment(R.layout.cycling_add_ride_fragment) {
                 ).build()
             ).build()
         datePicker.addOnPositiveButtonClickListener {
-            viewModel.rideDate = it
-            binding.cyclingAddCurrentDateTextView.text = dateFormatting(viewModel.rideDate)
+            rideDate = it
+            binding.cyclingAddCurrentDateTextView.text = dateFormatting(rideDate)
         }
 
         //set current date (today) to dateTextView
-        binding.cyclingAddCurrentDateTextView.text = dateFormatting(viewModel.rideDate)
+        binding.cyclingAddCurrentDateTextView.text = dateFormatting(rideDate)
 
         //set dateTextView action OnClick - open MaterialDatePicker and allow user to choose date
         binding.cyclingAddCurrentDateTextView.setOnClickListener {
@@ -93,26 +99,30 @@ class CyclingAddRideFragment : Fragment(R.layout.cycling_add_ride_fragment) {
                 binding.cyclingAddDestinationEditText.editText?.text.isNullOrEmpty() -> {
                     binding.cyclingAddDistanceEditText.error = "Required"
                 }
+//                preventing to add ride with ride time 00:00 because it's impossible and will affect avg speed value
+                binding.cyclingAddHoursNumberPicker.value==0 && binding.cyclingAddMinsNumberPicker.value==0 -> {
+                    Toast.makeText(requireContext(), "Choose correct ride time", Toast.LENGTH_SHORT).show()
+                }
                 else -> {
-                    viewModel.distance = binding.cyclingAddDistanceEditText.editText?.text.toString().toFloat()
-                    viewModel.destination = binding.cyclingAddDestinationEditText.editText?.text.toString()
-                    viewModel.duration = binding.cyclingAddMinsNumberPicker.value + binding.cyclingAddHoursNumberPicker.value*60
+                    distance = binding.cyclingAddDistanceEditText.editText?.text.toString().toFloat()
+                    destination = binding.cyclingAddDestinationEditText.editText?.text.toString()
+                    duration = binding.cyclingAddMinsNumberPicker.value + binding.cyclingAddHoursNumberPicker.value*60
                     binding.cyclingAddDistanceEditText.error = null
                     binding.cyclingAddDistanceEditText.error = null
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(resources.getString(R.string.cycling_add_dialog_title))
-                        .setMessage("Date: ${dateFormatting(viewModel.rideDate)},\nDistance: ${viewModel.distance} km,\nDuration: ${viewModel.duration/60}:${String.format("%02d",viewModel.duration%60)},\nDestination: ${viewModel.destination} ?")
+                        .setMessage("Date: ${dateFormatting(rideDate)},\nDistance: $distance km,\nDuration: ${duration/60}:${String.format("%02d",duration%60)}," +
+                                "\nDestination: $destination ?")
                         .setNeutralButton(resources.getString(R.string.cancel)){ dialog, _ ->
                             dialog.dismiss()
                         }
-                        .setPositiveButton(resources.getString(R.string.ok)) { dialog, which ->
-                        // TODO: send to database
-                            Toast.makeText(
-                                requireContext(),
-                                "Made ${viewModel.distance} km in ${viewModel.duration} mins and gone to ${viewModel.destination}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            // end of todo
+                        .setPositiveButton(resources.getString(R.string.ok)) { _, _ ->
+                            viewModel.insert(CyclingRide(distance, duration, rideDate, destination))
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "Made ${viewModel.distance} km in ${viewModel.duration} mins and gone to ${viewModel.destination}",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
                             setDefaultUIValues()
                         }.show()
                     view.clearFocus()
@@ -139,6 +149,7 @@ class CyclingAddRideFragment : Fragment(R.layout.cycling_add_ride_fragment) {
         binding.cyclingAddHoursNumberPicker.value = 0
         binding.cyclingAddMinsNumberPicker.value = 0
     }
+
     private fun dateFormatting(milis: Long): String{
         return SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(milis)
     }

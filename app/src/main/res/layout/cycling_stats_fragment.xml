@@ -1,18 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/cycling_background"
+    android:padding="16dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="171dp"
-        android:layout_marginTop="359dp"
-        android:text="TextView"
+        android:layout_marginTop="8dp"
+        android:text="@string/most_frequent_dest_title"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/most_frequent_destination_textView"
+        app:layout_constraintStart_toStartOf="@+id/most_frequent_destination_textView"
+        app:layout_constraintTop_toBottomOf="@+id/most_frequent_destination_textView" />
+
+    <TextView
+        android:id="@+id/avg_speed_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/avg_speed_content"
+        android:textColor="@android:color/black"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/avg_speed_title"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/avg_speed_textView"
+        app:layout_constraintStart_toStartOf="@+id/avg_speed_textView"
+        app:layout_constraintTop_toBottomOf="@+id/avg_speed_textView" />
+
+    <TextView
+        android:id="@+id/total_distance_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/total_distance_content"
+        android:textColor="@android:color/black"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/avg_speed_textView" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/total_distance_title"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/total_distance_textView"
+        app:layout_constraintStart_toStartOf="@+id/total_distance_textView"
+        app:layout_constraintTop_toBottomOf="@+id/total_distance_textView" />
+
+    <TextView
+        android:id="@+id/total_time_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/total_time_content"
+        android:textColor="@android:color/black"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/total_time_title"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/total_time_textView"
+        app:layout_constraintStart_toStartOf="@+id/total_time_textView"
+        app:layout_constraintTop_toBottomOf="@+id/total_time_textView" />
+
+    <TextView
+        android:id="@+id/most_frequent_destination_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/destination"
+        android:textColor="@android:color/black"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/total_time_textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
