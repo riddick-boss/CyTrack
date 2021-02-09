@@ -26,6 +26,9 @@
     <string name="total_time_title">Total time</string>
     <string name="total_time_content">00:00</string>
     <string name="most_frequent_dest_title">Most freq. dest.</string>
+    <string name="location_permissions">Location permissions are necessary to track your training properly</string>
+    <string name="start">Start</string>
+    <string name="finish">Finish</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

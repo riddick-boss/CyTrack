@@ -1,6 +1,8 @@
 package abandonedstudio.app.cytrack
 
 import abandonedstudio.app.cytrack.databinding.CyclingActivityBinding
+import abandonedstudio.app.cytrack.utils.Constants.ACTION_SHOW_MAP_FRAGMENT
+import android.content.Intent
 import android.os.Bundle
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -8,6 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,6 +24,8 @@ class CyclingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = CyclingActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        navigateToMapFragmentIfNeeded(intent)
 
 //        setContentView(R.layout.cycling_activity)
 //        val cyclingToolbar: Toolbar = findViewById(R.id.cycling_toolbar)
@@ -49,5 +54,18 @@ class CyclingActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.cycling_nav_host) as NavHostFragment
         val cyclingNavController = navHostFragment.navController
         return cyclingNavController.navigateUp(cyclingAppBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToMapFragmentIfNeeded(intent)
+    }
+
+//    navigating to mapFragment if user clicks tracking notification
+    private fun navigateToMapFragmentIfNeeded(intent: Intent?){
+        if (intent?.action == ACTION_SHOW_MAP_FRAGMENT){
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.cycling_nav_host) as NavHostFragment
+            navHostFragment.findNavController().navigate(R.id.action_global_to_cyclingMapFragment)
+        }
     }
 }
