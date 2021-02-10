@@ -1,14 +1,14 @@
 package abandonedstudio.app.cytrack.model
 
+import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "cycling_rides")
 data class CyclingRide(
 
-    @ColumnInfo(name = "distance")
+    @ColumnInfo(name = "distance_in_km")
     var distance: Float,
 
     @ColumnInfo(name = "duration")
@@ -19,6 +19,9 @@ data class CyclingRide(
 
     @ColumnInfo(name = "destination")
     var destination: String = "Mysterious",
+
+    @ColumnInfo(name = "track_image")
+    var img: Bitmap? = null,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "rideId")

@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">CyTrack</string>
     <string name="cycling_stats">Statistics</string>
-    <string name="calendar">Calendar</string>
+    <string name="map">Map</string>
     <string name="add_ride">Add ride</string>
     <string name="assignment">Provided by AbandonedStudio</string>
     <string name="cycling">Cycling</string>
+    <string name="ridding">Ridding</string>
     <string name="running">Running</string>
     <string name="cycling_motivation">Boost your performance</string>
     <string name="distance">Distance</string>
@@ -15,6 +16,7 @@
     <string name="date_pattern">dd/mm/yyyy</string>
     <string name="add">Add</string>
     <string name="destination">Destination</string>
+    <string name="enter_destination">Where have you been?</string>
     <string name="cycling_add_dialog_title">You want to add:</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -28,6 +30,7 @@
     <string name="most_frequent_dest_title">Most freq. dest.</string>
     <string name="location_permissions">Location permissions are necessary to track your training properly</string>
     <string name="start">Start</string>
+    <string name="pause">Pause</string>
     <string name="finish">Finish</string>
 
     <!-- TODO: Remove or change this placeholder text -->

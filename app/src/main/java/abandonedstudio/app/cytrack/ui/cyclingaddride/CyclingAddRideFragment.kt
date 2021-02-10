@@ -3,6 +3,7 @@ package abandonedstudio.app.cytrack.ui.cyclingaddride
 import abandonedstudio.app.cytrack.R
 import abandonedstudio.app.cytrack.databinding.CyclingAddRideFragmentBinding
 import abandonedstudio.app.cytrack.model.CyclingRide
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -117,7 +118,8 @@ class CyclingAddRideFragment : Fragment() {
                             dialog.dismiss()
                         }
                         .setPositiveButton(resources.getString(R.string.ok)) { _, _ ->
-                            viewModel.insert(CyclingRide(distance, duration, rideDate, destination))
+                            val bitmap = BitmapFactory.decodeResource(requireContext().resources, R.drawable.main_background)
+                            viewModel.insert(CyclingRide(distance, duration, rideDate, destination, bitmap))
 //                            Toast.makeText(
 //                                requireContext(),
 //                                "Made ${viewModel.distance} km in ${viewModel.duration} mins and gone to ${viewModel.destination}",

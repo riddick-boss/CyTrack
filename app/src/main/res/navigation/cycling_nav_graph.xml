@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cycling_nav_graph"
-    app:startDestination="@id/CyclingAddRideFragment">
+    app:startDestination="@id/CyclingMapFragment">
 
     <action android:id="@+id/action_global_to_cyclingMapFragment"
         app:destination="@id/CyclingMapFragment"
@@ -16,8 +16,8 @@
         tools:layout="@layout/cycling_stats_fragment" />
     <fragment
         android:id="@id/CyclingMapFragment"
-        android:label="@string/calendar"
-        android:name="abandonedstudio.app.cytrack.ui.cyclingcalendar.CyclingMapFragment"
+        android:label="@string/map"
+        android:name="abandonedstudio.app.cytrack.ui.cyclingmap.CyclingMapFragment"
         tools:layout="@layout/cycling_map_fragment" />
     <fragment
         android:id="@+id/CyclingAddRideFragment"

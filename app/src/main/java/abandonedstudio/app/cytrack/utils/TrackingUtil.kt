@@ -1,6 +1,5 @@
 package abandonedstudio.app.cytrack.utils
 
-import abandonedstudio.app.cytrack.R
 import abandonedstudio.app.cytrack.utils.Constants.TRACKING_NOTIFICATION_CHANNEL_ID
 import abandonedstudio.app.cytrack.utils.Constants.TRACKING_NOTIFICATION_CHANNEL_NAME
 import android.Manifest
@@ -8,9 +7,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Context
+import android.location.Location
 import android.os.Build
-import androidx.core.app.NotificationCompat
+import com.google.android.gms.maps.model.LatLng
 import pub.devrel.easypermissions.EasyPermissions
+import java.util.concurrent.TimeUnit
 
 object TrackingUtil {
 
@@ -40,6 +41,31 @@ object TrackingUtil {
         notificationManager.createNotificationChannel(channel)
     }
 
+    fun formatTime(milliseconds: Long): String {
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)%60
+        val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)
+        return "${hours}:${String.format("%02d",minutes)}"
+    }
 
+    fun calculateDistance(sets: MutableList<MutableList<LatLng>>): Float{
+        var distance = 0f
+        for (set in sets){
+            for (i in 0..set.size-2){
+                val coordinates1 = set[i]
+                val coordinates2 = set[i+1]
+
+                val resultArray = FloatArray(1)
+                Location.distanceBetween(
+                    coordinates1.latitude,
+                    coordinates1.longitude,
+                    coordinates2.latitude,
+                    coordinates2.longitude,
+                    resultArray
+                )
+                distance += resultArray[0]
+            }
+        }
+        return distance
+    }
 
 }

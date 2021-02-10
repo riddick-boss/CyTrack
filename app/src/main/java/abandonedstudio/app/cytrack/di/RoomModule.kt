@@ -1,6 +1,5 @@
 package abandonedstudio.app.cytrack.di
 
-import abandonedstudio.app.cytrack.model.CyclingRide
 import abandonedstudio.app.cytrack.model.MyDatabase
 import abandonedstudio.app.cytrack.utils.Constants.MY_DATABASE_NAME
 import android.content.Context

@@ -19,4 +19,13 @@ object Constants {
     const val TRACKING_NOTIFICATION_CHANNEL_NAME = "TRACKING"
 
     const val TRACKING_NOTIFICATION_ID = 1
+
+    const val LOCATION_UPDATE_INTERVAL = 4000L
+
+    const val FASTEST_LOCATION_UPDATE_INTERVAL = 3000L
+
+    const val POLYLINE_WIDTH_ON_MAP = 8f
+
+    const val MAP_ZOOM = 15f
+
 }
