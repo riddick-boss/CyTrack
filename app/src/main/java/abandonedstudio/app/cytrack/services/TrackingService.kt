@@ -50,7 +50,6 @@ class TrackingService: LifecycleService() {
     private var isServiceKilled = false
 
     private val trainingTimeInMinutes= MutableLiveData<Long>()
-    private var isTimerEnabled = false
     private var lapTime = 0L
     private var startTime = 0L
     private var totalTime = 0L
@@ -164,7 +163,6 @@ class TrackingService: LifecycleService() {
 //    pausing tracking
     private fun pauseService(){
         isTrackingActive.postValue(false)
-        isTimerEnabled = false
     }
 
 //    ending tracking
@@ -177,14 +175,13 @@ class TrackingService: LifecycleService() {
         stopSelf()
     }
 
-//    starting timer, creating new set of coordinates, starting tracking again
+//    starting timer, creating new set of coordinates, starting tracking again, updating timer
     private fun startTimerAndStartTracking(){
         addNextCoordinatesList()
         isServiceKilled=false
         // this is starting tracking
         isTrackingActive.postValue(true)
         startTime = System.currentTimeMillis()
-        isTimerEnabled = true
         CoroutineScope(Dispatchers.Main).launch {
             while (isTrackingActive.value!!){
                 lapTime = System.currentTimeMillis() - startTime
@@ -192,7 +189,7 @@ class TrackingService: LifecycleService() {
 //                checking if next whole minute has passed - if true updating notification
                 if (trainingTimeInMilis.value!! >= minuteTimestamp + 60000L){
                     trainingTimeInMinutes.postValue(trainingTimeInMinutes.value!! + 1)
-                    minuteTimestamp = 60000L
+                    minuteTimestamp += 60000L
                 }
                 delay(10000L)
             }
@@ -229,20 +226,11 @@ class TrackingService: LifecycleService() {
             },
             FLAG_UPDATE_CURRENT
         )
-//        val pendingIntentEnd = PendingIntent.getService(
-//            this,
-//            3,
-//            Intent(this, TrackingService::class.java).apply {
-//                action = ACTION_END_TRACKING_SERVICE
-//            },
-//            FLAG_UPDATE_CURRENT
-//        )
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         updatedNotificationBuilder.mActions.clear()
         if (!isServiceKilled){
             updatedNotificationBuilder = baseNotificationBuilder
                 .addAction(R.drawable.ic_round_pause_24, if (isTrackingNow) "Pause" else "Resume", pendingIntentStartStop)
-//                .addAction(R.drawable.ic_round_stop_24, "Finish", pendingIntentEnd)
             notificationManager.notify(TRACKING_NOTIFICATION_ID, updatedNotificationBuilder.build())
         }
     }

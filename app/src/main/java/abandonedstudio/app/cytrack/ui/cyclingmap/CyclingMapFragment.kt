@@ -12,6 +12,7 @@ import abandonedstudio.app.cytrack.utils.Constants.MAP_ZOOM
 import abandonedstudio.app.cytrack.utils.Constants.POLYLINE_WIDTH_ON_MAP
 import abandonedstudio.app.cytrack.utils.TrackingUtil
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -46,8 +47,6 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
     private var isTrackingNow = false
     private var pathPoints = mutableListOf<MutableList<LatLng>>()
 
-//    private var currentTrainingTimeinMilis = 0L
-
 //    this actually holds map on which actions (tracking, etc) are performed (mapView just displays it)
     private var map: GoogleMap? = null
 
@@ -80,6 +79,10 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
         binding.finishButton.setOnClickListener {
             it.visibility = View.INVISIBLE
             endTrackingAndSave()
+        }
+
+        binding.cancelTrackingImageButton.setOnClickListener {
+            cancelTracking()
         }
 
         subscribeToServiceData()
@@ -117,11 +120,6 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
         binding.mapView.onLowMemory()
     }
 
-    //     fun to be able to cache map and avoid fully loading it every time
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        binding.mapView.onSaveInstanceState(outState)
-    }
 
     /************************************************************************/
 
@@ -174,6 +172,20 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
         }
     }
 
+    @Suppress("SameParameterValue")
+    private fun toggleUI(isTracking: Boolean, end: Boolean){
+        this.isTrackingNow = isTracking
+        if (isTracking){
+            binding.startStopButton.text = getString(R.string.pause)
+            binding.finishButton.visibility = View.VISIBLE
+        } else {
+            binding.startStopButton.text = getString(R.string.start)
+            if(end){
+                binding.finishButton.visibility = View.INVISIBLE
+            }
+        }
+    }
+
 //    toggling tracking service (start/pause/resume)
     private fun toggleTracking(){
         if (isTrackingNow){
@@ -183,7 +195,7 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-//    end tracking service
+//    end tracking service WITH saving to db
     private fun endTrackingAndSave(){
         deliverActionToService(ACTION_PAUSE_TRACKING_SERVICE)
         zoomToWholeTrack()
@@ -202,14 +214,40 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
                     dialog.dismiss()
                 }
                 .setPositiveButton(R.string.ok){ _, _ ->
-                    val destination = view.findViewById<EditText>(R.id.destination_editText)?.text?.toString() ?: "Nothing"
+                    // prevent adding empty string and nullPointerException
+                    var destination = view.findViewById<EditText>(R.id.destination_editText)?.text?.toString()
+                        ?.trim()
+                        ?: "Mysterious"
+                    if (destination.isEmpty()){
+                        destination = "Mysterious"
+                    }
                     viewModel.insert(CyclingRide(distanceInKm, duration, date, destination, it))
                     deliverActionToService(ACTION_END_TRACKING_SERVICE)
+                    map?.clear()
+                    pathPoints.clear()
                     Toast.makeText(
                         requireContext(),
-                        "Saved successfully to $destination",
+                        "Saved successfully",
                         Toast.LENGTH_SHORT
                     ).show()
+                }.show()
+        }
+    }
+
+//    end tracking service WITHOUT saving to db
+    private fun cancelTracking(){
+        if(isTrackingNow){
+            deliverActionToService(ACTION_PAUSE_TRACKING_SERVICE)
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(resources.getString(R.string.confirm_canceling_tracking))
+                .setNeutralButton(resources.getString(R.string.cancel)){ dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton(resources.getString(R.string.ok)){ _, _ ->
+                    toggleUI(isTracking = false, end = true)
+                    deliverActionToService(ACTION_END_TRACKING_SERVICE)
+                    map?.clear()
+                    pathPoints.clear()
                 }.show()
         }
     }
@@ -232,6 +270,7 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
     }
 
 //    observing service data
+    @SuppressLint("SetTextI18n")
     private fun subscribeToServiceData(){
         TrackingService.isTrackingActive.observe(viewLifecycleOwner, {
             toggleUI(it)
@@ -241,11 +280,12 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
             pathPoints=it
             latestPolyline()
             moveCameraToCurrentLocation()
+//            rounding to 2 decimal places
+            binding.distanceTextView.text = "${((TrackingUtil.calculateDistance(pathPoints) / 10).roundToInt() /100f)} km"
         })
 
         TrackingService.trainingTimeInMilis.observe(viewLifecycleOwner, {
             binding.durationTextView.text = TrackingUtil.formatTime(it)
-            binding.distanceTextView.text = ((TrackingUtil.calculateDistance(pathPoints) / 10).roundToInt() /100f).toString()
         })
     }
 

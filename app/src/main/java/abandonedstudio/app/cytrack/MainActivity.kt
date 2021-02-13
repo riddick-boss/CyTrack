@@ -9,7 +9,6 @@ import android.view.View
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
-//    private val binding by viewBinding (ActivityMainBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +28,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.running_choose_sport_cardView->{
                 // TODO: add start activity running
             }
-/*            R.id.appname_main_textView -> {
-                Toast.makeText(this, "toast", Toast.LENGTH_SHORT).show()
-            }*/
         }
     }
 }

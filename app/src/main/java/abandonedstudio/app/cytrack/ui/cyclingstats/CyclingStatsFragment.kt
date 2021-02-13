@@ -38,7 +38,7 @@ class CyclingStatsFragment: Fragment() {
 
         viewModel.totalRideDistance.observe(viewLifecycleOwner, {
             it?.let {
-                binding.totalDistanceTextView.text = "$it km"
+                binding.totalDistanceTextView.text = "${String.format("%.3f", it)} km"
             }
         })
 

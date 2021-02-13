@@ -3,7 +3,6 @@ package abandonedstudio.app.cytrack.ui.cyclingaddride
 import abandonedstudio.app.cytrack.R
 import abandonedstudio.app.cytrack.databinding.CyclingAddRideFragmentBinding
 import abandonedstudio.app.cytrack.model.CyclingRide
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,8 +25,7 @@ import java.util.*
 class CyclingAddRideFragment : Fragment() {
 
     private val viewModel: CyclingAddRideViewModel by viewModels()
-//    private lateinit var binding: CyclingAddRideFragmentBinding
-//    private val binding by viewBinding (CyclingAddRideFragmentBinding::bind)
+
     private var _binding: CyclingAddRideFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -36,14 +34,6 @@ class CyclingAddRideFragment : Fragment() {
     private var rideDate = System.currentTimeMillis()
     private var destination = ""
 
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        viewModel = ViewModelProvider(this).get(CyclingAddRideViewModel::class.java)
-//        return inflater.inflate(R.layout.cycling_add_ride_fragment, container, false)
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,9 +54,6 @@ class CyclingAddRideFragment : Fragment() {
         viewModel.distinctDestinations.observe(viewLifecycleOwner, {
             (binding.cyclingAddDestinationEditText.editText as? AutoCompleteTextView)?.setAdapter(ArrayAdapter(requireContext(), android.R.layout.select_dialog_item, it))
         })
-//        val items = listOf("aa", "bb")
-//        val adapter = ArrayAdapter(requireContext(), android.R.layout.select_dialog_item, items)
-//        (binding.cyclingAddDestinationEditText.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
         // Creating the MaterialDatePicker builder, setting the title, applying validator (past dates;today> and setting actions OnCLick
         val datePicker = MaterialDatePicker.Builder.datePicker()
@@ -83,15 +70,14 @@ class CyclingAddRideFragment : Fragment() {
             binding.cyclingAddCurrentDateTextView.text = dateFormatting(rideDate)
         }
 
-        //set current date (today) to dateTextView
+//        set current date (today) to dateTextView
         binding.cyclingAddCurrentDateTextView.text = dateFormatting(rideDate)
 
-        //set dateTextView action OnClick - open MaterialDatePicker and allow user to choose date
+//        set dateTextView action OnClick - open MaterialDatePicker and allow user to choose date
         binding.cyclingAddCurrentDateTextView.setOnClickListener {
             datePicker.show(parentFragmentManager, "")
         }
 
-//        binding = CyclingAddRideFragmentBinding.bind(view)
         binding.cyclingAddButton.setOnClickListener {
             when {
                 binding.cyclingAddDistanceEditText.editText?.text.isNullOrEmpty() -> {
@@ -118,13 +104,13 @@ class CyclingAddRideFragment : Fragment() {
                             dialog.dismiss()
                         }
                         .setPositiveButton(resources.getString(R.string.ok)) { _, _ ->
-                            val bitmap = BitmapFactory.decodeResource(requireContext().resources, R.drawable.main_background)
-                            viewModel.insert(CyclingRide(distance, duration, rideDate, destination, bitmap))
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "Made ${viewModel.distance} km in ${viewModel.duration} mins and gone to ${viewModel.destination}",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
+//                            val bitmap = BitmapFactory.decodeResource(requireContext().resources, R.drawable.main_background)
+                            viewModel.insert(CyclingRide(distance, duration, rideDate, destination))
+                            Toast.makeText(
+                                requireContext(),
+                                "Saved successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             setDefaultUIValues()
                         }.show()
                     view.clearFocus()

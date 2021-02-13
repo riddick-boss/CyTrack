@@ -6,7 +6,6 @@ import javax.inject.Inject
 
 class CyclingRideRepository @Inject constructor(private val cyclingRideDao: CyclingRideDao) {
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insert(cyclingRide: CyclingRide) {
         cyclingRideDao.insert(cyclingRide)
@@ -18,6 +17,6 @@ class CyclingRideRepository @Inject constructor(private val cyclingRideDao: Cycl
 
     val totalDistance: LiveData<Float> = cyclingRideDao.getTotalDistance()
 
-    val avgSpeedKmH: LiveData<Float> = cyclingRideDao.getAvgSpeedKmH()
+    fun getAvgSpeedKmH() = cyclingRideDao.getAvgSpeedKmH()
 
 }
