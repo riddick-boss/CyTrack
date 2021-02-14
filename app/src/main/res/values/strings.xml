@@ -36,5 +36,18 @@
     <string name="title_activity_cycling">CyclingActivity</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="button_desc_cancel_tracking">cancel tracking without saving to db</string>
+    <string name="main_activity_navigate_to_settings">navigate to settings</string>
+    <string name="best_tracking_desc">Best tracking precision, biggest battery consumption</string>
+    <string name="three_second_period">3 sec.</string>
+    <string name="seven_second_period">7 sec.</string>
+    <string name="twelve_second_period">12 sec.</string>
+    <string name="medium_tracking_desc">Medium tracking precision, medium battery consumption</string>
+    <string name="worst_tracking_desc">Worst tracking precision, smallest battery consumption</string>
+    <string name="settings">Settings</string>
+    <string name="description">Description</string>
+    <string name="tracking_period_setting_desc">Choose location update time:</string>
+    <string name="save">Save</string>
+    <string name="main_settings_label">Main settings</string>
+    <string name="settings_saved">Settings saved</string>
 
 </resources>

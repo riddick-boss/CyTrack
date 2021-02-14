@@ -4,9 +4,17 @@ import abandonedstudio.app.cytrack.R
 import abandonedstudio.app.cytrack.utils.Constants.ACTION_END_TRACKING_SERVICE
 import abandonedstudio.app.cytrack.utils.Constants.ACTION_PAUSE_TRACKING_SERVICE
 import abandonedstudio.app.cytrack.utils.Constants.ACTION_START_OR_RESUME_TRACKING_SERVICE
-import abandonedstudio.app.cytrack.utils.Constants.FASTEST_LOCATION_UPDATE_INTERVAL
-import abandonedstudio.app.cytrack.utils.Constants.LOCATION_UPDATE_INTERVAL
+import abandonedstudio.app.cytrack.utils.Constants.FASTEST_SEVEN_SEC_LOCATION_UPDATE_PERIOD
+import abandonedstudio.app.cytrack.utils.Constants.FASTEST_THREE_SEC_LOCATION_UPDATE_PERIOD
+import abandonedstudio.app.cytrack.utils.Constants.FASTEST_TWELVE_SEC_LOCATION_UPDATE_PERIOD
+import abandonedstudio.app.cytrack.utils.Constants.LOCATION_UPDATE_PERIOD_KEY
+import abandonedstudio.app.cytrack.utils.Constants.SEVEN_SEC_LOCATION_UPDATE_PERIOD
+import abandonedstudio.app.cytrack.utils.Constants.SEVEN_SEC_LOCATION_UPDATE_PERIOD_DS
+import abandonedstudio.app.cytrack.utils.Constants.THREE_SEC_LOCATION_UPDATE_PERIOD
+import abandonedstudio.app.cytrack.utils.Constants.THREE_SEC_LOCATION_UPDATE_PERIOD_DS
 import abandonedstudio.app.cytrack.utils.Constants.TRACKING_NOTIFICATION_ID
+import abandonedstudio.app.cytrack.utils.Constants.TWELVE_SEC_LOCATION_UPDATE_PERIOD
+import abandonedstudio.app.cytrack.utils.Constants.TWELVE_SEC_LOCATION_UPDATE_PERIOD_DS
 import abandonedstudio.app.cytrack.utils.TrackingUtil
 import android.annotation.SuppressLint
 import android.app.NotificationManager
@@ -17,6 +25,10 @@ import android.content.Intent
 import android.location.Location
 import android.os.Looper
 import androidx.core.app.NotificationCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.createDataStore
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -26,10 +38,8 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,20 +54,47 @@ class TrackingService: LifecycleService() {
 
     private lateinit var updatedNotificationBuilder: NotificationCompat.Builder
 
+    private lateinit var dataStore: DataStore<Preferences>
+
 //    this is to check if user has started completely new training or if he is continuing another (resuming)
     private var isFirstPartOfTraining = true
 
     private var isServiceKilled = false
 
-    private val trainingTimeInMinutes= MutableLiveData<Long>()
+//    private val trainingTimeInMinutes= MutableLiveData<Long>()
+    private val trainingTimeInMilis = MutableLiveData<Long>()
     private var lapTime = 0L
     private var startTime = 0L
     private var totalTime = 0L
     private var minuteTimestamp = 0L
 
+    private var locationUpdateInterval = THREE_SEC_LOCATION_UPDATE_PERIOD
+    private var fastestLocationUpdateInterval = FASTEST_THREE_SEC_LOCATION_UPDATE_PERIOD
+
+    companion object{
+        val isTrackingActive = MutableLiveData<Boolean>()
+
+        val trainingTimeInMinutes= MutableLiveData<Int>()
+
+        //        this is list of lists of coordinates; user might stop tracking and resume later on after changing location,
+//        so to prevent counting distance when tracking was paused, each line is stored as separate list of coordinates;
+//        all this lines together create real distance which was ridden during training
+//        it's typed as MutableLiveData, so it is easy to observe changes
+        val pathCoordinates = MutableLiveData<MutableList<MutableList<LatLng>>>()
+    }
+
 
     override fun onCreate() {
         super.onCreate()
+
+        dataStore = createDataStore(name = "global_settings")
+//        if loading async then settings might not be loaded properly
+//        timeout 5s, if not able to access settings -> 3sec period will be set
+        runBlocking {
+            withTimeout(5000L){
+                loadTrackingIntervals()
+            }
+        }
 
         updatedNotificationBuilder = baseNotificationBuilder
         initializeValues()
@@ -66,6 +103,25 @@ class TrackingService: LifecycleService() {
             updateTracking(it)
             updateNotification(it)
         })
+    }
+
+    private suspend fun loadTrackingIntervals() {
+        val  dataStoreKey = stringPreferencesKey(LOCATION_UPDATE_PERIOD_KEY)
+        val  preferences = dataStore.data.first()
+        when(preferences[dataStoreKey]) {
+            THREE_SEC_LOCATION_UPDATE_PERIOD_DS -> {
+                locationUpdateInterval = THREE_SEC_LOCATION_UPDATE_PERIOD
+                fastestLocationUpdateInterval = FASTEST_THREE_SEC_LOCATION_UPDATE_PERIOD
+            }
+            SEVEN_SEC_LOCATION_UPDATE_PERIOD_DS -> {
+                locationUpdateInterval = SEVEN_SEC_LOCATION_UPDATE_PERIOD
+                fastestLocationUpdateInterval = FASTEST_SEVEN_SEC_LOCATION_UPDATE_PERIOD
+            }
+            TWELVE_SEC_LOCATION_UPDATE_PERIOD_DS -> {
+                locationUpdateInterval = TWELVE_SEC_LOCATION_UPDATE_PERIOD
+                fastestLocationUpdateInterval = FASTEST_TWELVE_SEC_LOCATION_UPDATE_PERIOD
+            }
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -92,22 +148,10 @@ class TrackingService: LifecycleService() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    companion object{
-        val isTrackingActive = MutableLiveData<Boolean>()
-
-        val trainingTimeInMilis = MutableLiveData<Long>()
-
-//        this is list of lists of coordinates; user might stop tracking and resume later on after changing location,
-//        so to prevent counting distance when tracking was paused, each line is stored as separate list of coordinates;
-//        all this lines together create real distance which was ridden during training
-//        it's typed as MutableLiveData, so it is easy to observe changes
-        val pathCoordinates = MutableLiveData<MutableList<MutableList<LatLng>>>()
-    }
-
     private fun initializeValues(){
         isTrackingActive.postValue(false)
         pathCoordinates.postValue(mutableListOf())
-        trainingTimeInMinutes.postValue(0L)
+        trainingTimeInMinutes.postValue(0)
         trainingTimeInMilis.postValue(0L)
     }
 
@@ -149,8 +193,8 @@ class TrackingService: LifecycleService() {
         if (isTracking){
             if (TrackingUtil.checkLocationPermissions(this)){
                 val locationRequest = LocationRequest().apply {
-                    interval = LOCATION_UPDATE_INTERVAL
-                    fastestInterval = FASTEST_LOCATION_UPDATE_INTERVAL
+                    interval = locationUpdateInterval
+                    fastestInterval = fastestLocationUpdateInterval
                     priority = PRIORITY_HIGH_ACCURACY
                 }
                 fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
@@ -206,10 +250,10 @@ class TrackingService: LifecycleService() {
 
         startForeground(TRACKING_NOTIFICATION_ID, baseNotificationBuilder.build())
 
-        trainingTimeInMilis.observe(this, {
+        trainingTimeInMinutes.observe(this, {
             if (!isServiceKilled){
                 val notification = updatedNotificationBuilder
-                    .setContentText(TrackingUtil.formatTime(it))
+                    .setContentText(TrackingUtil.formatTimeInMinutes(it))
                 notificationManager.notify(TRACKING_NOTIFICATION_ID, notification.build())
             }
         })

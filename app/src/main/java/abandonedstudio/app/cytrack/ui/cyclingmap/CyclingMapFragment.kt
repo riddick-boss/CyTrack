@@ -33,7 +33,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
@@ -202,7 +201,7 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
         map?.snapshot {
             val distanceInKm = (TrackingUtil.calculateDistance(pathPoints) / 10).roundToInt() /100f
             val date = System.currentTimeMillis()
-            var duration = TimeUnit.MILLISECONDS.toMinutes((TrackingService.trainingTimeInMilis.value ?: 1L)).toInt()
+            var duration = TrackingService.trainingTimeInMinutes.value ?: 1
 //            setting duration as at least 1 -> 0 will cause errors whit calculating avg speed (div by 0)
             if (duration < 1) {
                 duration = 1
@@ -284,8 +283,8 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
             binding.distanceTextView.text = "${((TrackingUtil.calculateDistance(pathPoints) / 10).roundToInt() /100f)} km"
         })
 
-        TrackingService.trainingTimeInMilis.observe(viewLifecycleOwner, {
-            binding.durationTextView.text = TrackingUtil.formatTime(it)
+        TrackingService.trainingTimeInMinutes.observe(viewLifecycleOwner, {
+            binding.durationTextView.text = TrackingUtil.formatTimeInMinutes(it)
         })
     }
 
