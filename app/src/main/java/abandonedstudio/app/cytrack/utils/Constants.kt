@@ -6,28 +6,24 @@ object Constants {
 
     const val LOCATION_PERMISSION_REQUEST_CODE = 0
 
+//    tracking service intent actions
     const val ACTION_START_OR_RESUME_TRACKING_SERVICE = "ACTION_START_OR_RESUME_TRACKING_SERVICE"
-
     const val ACTION_PAUSE_TRACKING_SERVICE = "ACTION_PAUSE_TRACKING_SERVICE"
-
     const val ACTION_END_TRACKING_SERVICE = "ACTION_END_TRACKING_SERVICE"
 
+//    intent action to show map fragment when clicking tracking notification
     const val ACTION_SHOW_MAP_FRAGMENT = "ACTION_SHOW_MAP_FRAGMENT"
 
+//    tracking notification stuff
     const val TRACKING_NOTIFICATION_CHANNEL_ID = "TRACKING_NOTIFICATION_CHANNEL_ID"
-
     const val TRACKING_NOTIFICATION_CHANNEL_NAME = "TRACKING"
-
     const val TRACKING_NOTIFICATION_ID = 1
 
-//    const val LOCATION_UPDATE_INTERVAL = 3000L
-//
-//    const val FASTEST_LOCATION_UPDATE_INTERVAL = 2000L
-
+//    specifying map appearance
     const val POLYLINE_WIDTH_ON_MAP = 8f
-
     const val MAP_ZOOM = 15f
 
+//    location update period keys and corresponding values (DataStore)
     const val LOCATION_UPDATE_PERIOD_KEY = "LOCATION_UPDATE_PERIOD_KEY"
 
     const val THREE_SEC_LOCATION_UPDATE_PERIOD_DS = "THREE_SEC_LOCATION_UPDATE_PERIOD"

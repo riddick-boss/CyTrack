@@ -11,7 +11,6 @@ import android.location.Location
 import android.os.Build
 import com.google.android.gms.maps.model.LatLng
 import pub.devrel.easypermissions.EasyPermissions
-import java.util.concurrent.TimeUnit
 
 object TrackingUtil {
 
@@ -41,11 +40,11 @@ object TrackingUtil {
         notificationManager.createNotificationChannel(channel)
     }
 
-    fun formatTime(milliseconds: Long): String {
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)%60
-        val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)
-        return "${hours}:${String.format("%02d",minutes)}"
-    }
+//    fun formatTime(milliseconds: Long): String {
+//        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)%60
+//        val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)
+//        return "${hours}:${String.format("%02d",minutes)}"
+//    }
 
     fun formatTimeInMinutes(minutes: Int): String{
         return "${minutes/60}:${String.format("%02d",minutes%60)}"

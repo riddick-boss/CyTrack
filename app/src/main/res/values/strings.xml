@@ -49,5 +49,11 @@
     <string name="save">Save</string>
     <string name="main_settings_label">Main settings</string>
     <string name="settings_saved">Settings saved</string>
+    <string name="year">Year</string>
+    <string name="year_by_year">Year-by-year</string>
+    <string name="calendar">Calendar</string>
+    <string name="days">days</string>
+    <string name="active_days">Active days</string>
+    <string name="img_cycling_img_desc">screenshot from tracking fragment</string>
 
 </resources>

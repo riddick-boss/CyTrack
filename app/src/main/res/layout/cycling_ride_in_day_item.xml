@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:backgroundTint="#99FFFFFF"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/cycling_ride_imageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/img_cycling_img_desc"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/avg_speed_ride_item_textView"
+            style="@style/BlackTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/avg_speed_content"
+            app:layout_constraintEnd_toStartOf="@+id/duration_ride_item_textView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cycling_ride_imageView" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/duration_ride_item_textView"
+            style="@style/BlackTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_time_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/avg_speed_ride_item_textView"
+            app:layout_constraintTop_toTopOf="@+id/avg_speed_ride_item_textView" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/distance_ride_item_textView"
+            style="@style/BlackTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/total_distance_content"
+            app:layout_constraintEnd_toEndOf="@+id/avg_speed_ride_item_textView"
+            app:layout_constraintStart_toStartOf="@+id/avg_speed_ride_item_textView"
+            app:layout_constraintTop_toBottomOf="@+id/avg_speed_ride_item_textView" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/destination_ride_item_textView"
+            style="@style/BlackTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/destination"
+            app:layout_constraintEnd_toEndOf="@+id/duration_ride_item_textView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/duration_ride_item_textView"
+            app:layout_constraintTop_toTopOf="@+id/distance_ride_item_textView" />
+
+        <View
+            android:id="@+id/view4"
+            style="@style/Divider"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/distance_ride_item_textView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

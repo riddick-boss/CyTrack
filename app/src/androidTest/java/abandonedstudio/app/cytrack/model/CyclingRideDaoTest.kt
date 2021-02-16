@@ -66,12 +66,23 @@ class CyclingRideDaoTest {
     fun avgSpeedAfterMultipleInserts() = runBlockingTest {
         val cyclingRide = CyclingRide(22f, 60, currentTime)
         dao.insert(cyclingRide)
-        val avgSpeed = dao.getAvgSpeedKmH().getOrAwaitValue()
+//        val avgSpeed = dao.getAvgSpeedKmH().getOrAwaitValue()
 //        Truth.assertThat(avgSpeed).isEqualTo(22f)
         val cyclingRide2 = CyclingRide(11f, 60, currentTime)
         dao.insert(cyclingRide2)
         val avgSpeed2 = dao.getAvgSpeedKmH().getOrAwaitValue()
         Truth.assertThat(avgSpeed2).isEqualTo(16.5f)
+    }
+
+    @Test
+    fun getAllCyclingRides() = runBlockingTest {
+        val cyclingRide = CyclingRide(22f, 60, currentTime, destination = "A")
+        dao.insert(cyclingRide)
+        val cyclingRide2 = CyclingRide(11f, 60, currentTime, destination = "B")
+        dao.insert(cyclingRide2)
+        val list = dao.getAllCyclingRides().getOrAwaitValue()
+        Truth.assertThat(list).isEqualTo(listOf(CyclingRide(22f, 60, currentTime, destination = "A", rideId = 1),
+            CyclingRide(11f, 60, currentTime, destination = "B", rideId = 2)))
     }
 
 }

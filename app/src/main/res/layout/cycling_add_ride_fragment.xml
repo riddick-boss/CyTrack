@@ -57,7 +57,7 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/cycling_add_current_date_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
 
         </LinearLayout>
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

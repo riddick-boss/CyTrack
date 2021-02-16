@@ -27,4 +27,7 @@ interface CyclingRideDao {
     @Query("SELECT COUNT(*) FROM cycling_rides")
     fun countRowsLD(): LiveData<Int>
 
+    @Query("SELECT * FROM cycling_rides")
+    fun getAllCyclingRides(): LiveData<List<CyclingRide>>
+
 }
