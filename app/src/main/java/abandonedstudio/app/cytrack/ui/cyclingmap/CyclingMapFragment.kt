@@ -196,8 +196,8 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
 
 //    end tracking service WITH saving to db
     private fun endTrackingAndSave(){
-        deliverActionToService(ACTION_PAUSE_TRACKING_SERVICE)
         zoomToWholeTrack()
+        deliverActionToService(ACTION_PAUSE_TRACKING_SERVICE)
         map?.snapshot {
             val distanceInKm = (TrackingUtil.calculateDistance(pathPoints) / 10).roundToInt() /100f
             val date = System.currentTimeMillis()

@@ -13,7 +13,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:scrollbars="none">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:background="#12FBFBFB"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView7"
@@ -153,7 +155,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/year_by_year"
-                android:textSize="20sp"
+                android:textSize="22sp"
+                android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5" />
 
@@ -164,7 +167,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/calendar"
-                android:textSize="20sp"
+                android:textSize="22sp"
+                android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/year_summary_recyclerView" />
 
@@ -173,9 +177,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@color/design_default_color_primary_dark"
+                android:background="#B33700B3"
                 android:datePickerMode="calendar"
-                android:headerBackground="#0641c2"
+                android:headerBackground="#990641c2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -185,12 +189,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cycling_stats_datePicker"
                 tools:itemCount="3"
                 tools:listitem="@layout/cycling_ride_in_day_item" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/no_rides_indicator_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/no_rides"
+                android:textColor="#716F6F"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cycling_stats_datePicker" />
+
+            <ImageButton
+                android:id="@+id/next_active_day_imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/cycling_stats_datePicker"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24"
+                android:contentDescription="set next active day on datePicker"
+                tools:ignore="HardcodedText" />
+
+            <ImageButton
+                android:id="@+id/prev_active_day_imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/cycling_stats_datePicker"
+                app:layout_constraintEnd_toStartOf="@+id/next_active_day_imageButton"
+                app:srcCompat="@drawable/ic_baseline_arrow_back_ios_new_24"
+                android:contentDescription="set prev active day on datePicker"
+                tools:ignore="HardcodedText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

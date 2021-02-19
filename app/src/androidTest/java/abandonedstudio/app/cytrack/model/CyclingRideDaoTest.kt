@@ -85,4 +85,89 @@ class CyclingRideDaoTest {
             CyclingRide(11f, 60, currentTime, destination = "B", rideId = 2)))
     }
 
+    @Test
+    fun getYears() = runBlockingTest {
+        val cyclingRide = CyclingRide(22f, 60, 1646089200000)
+        dao.insert(cyclingRide)
+        val years = dao.getDistinctYears()
+        Truth.assertThat(years).isEqualTo(listOf(2022))
+    }
+
+    @Test
+    fun getAllRidesFromYearTest() = runBlockingTest{
+        val cyclingRide = CyclingRide(22f, 60, 1646089200000)
+        val cyclingRide2 = CyclingRide(22f, 60, 1613640406126)
+        dao.insert(cyclingRide)
+        dao.insert(cyclingRide2)
+        val rides = dao.getAllRidesFromYear(2021)
+        Truth.assertThat(rides).isEqualTo(listOf(CyclingRide(22f, 60, 1613640406126, rideId = 2)))
+    }
+
+    @Test
+    fun getTotalTimeFromYearTest() = runBlockingTest {
+        val cyclingRide = CyclingRide(22f, 60, 1646089200000)
+        val cyclingRide2 = CyclingRide(22f, 32, 1646089210001)
+        val cyclingRide3 = CyclingRide(22f, 20, 1613640406126)
+        dao.insert(cyclingRide)
+        dao.insert(cyclingRide2)
+        dao.insert(cyclingRide3)
+        val totalTime = dao.getTotalTimeRideInYear(2022)
+        Truth.assertThat(totalTime).isEqualTo(92)
+    }
+
+    @Test
+    fun getMostFrequentDestinationInYearTest() = runBlockingTest {
+        val cyclingRide = CyclingRide(22f, 60, 1646089200000, destination = "A")
+        val cyclingRide2 = CyclingRide(11f, 60, 1646089200000, destination = "A")
+        val cyclingRide3 = CyclingRide(22f, 20, 1613640406126, destination = "B")
+        val cyclingRide4 = CyclingRide(22f, 20, 1613640406126, destination = "B")
+        val cyclingRide5 = CyclingRide(22f, 60, 1646089200000, destination = "B")
+        dao.insert(cyclingRide)
+        dao.insert(cyclingRide2)
+        dao.insert(cyclingRide3)
+        dao.insert(cyclingRide4)
+        dao.insert(cyclingRide5)
+        val dest = dao.getMostFrequentDestinationInYear(2021)
+        Truth.assertThat(dest).isEqualTo("B")
+    }
+
+    @Test
+    fun getActiveDaysInYearTest() = runBlockingTest {
+        val cyclingRide = CyclingRide(22f, 60, 1646089200000, destination = "A")
+        val cyclingRide2 = CyclingRide(11f, 60, 1658440800000, destination = "A")
+        val cyclingRide3 = CyclingRide(22f, 20, 1613640406126, destination = "B")
+        val cyclingRide5 = CyclingRide(22f, 60, 1658440800000, destination = "B")
+        dao.insert(cyclingRide)
+        dao.insert(cyclingRide2)
+        dao.insert(cyclingRide3)
+        dao.insert(cyclingRide5)
+        val days = dao.getActiveDaysInYear(2022)
+        Truth.assertThat(days).isEqualTo(2)
+    }
+
+    @Test
+    fun getAllRidesFromDay() = runBlockingTest {
+        val cyclingRide = CyclingRide(22f, 60, 1646089204000, destination = "A")
+        val cyclingRide2 = CyclingRide(11f, 60, 1646089200100, destination = "A")
+        val cyclingRide3 = CyclingRide(22f, 20, 1613640406126, destination = "B")
+        dao.insert(cyclingRide)
+        dao.insert(cyclingRide2)
+        dao.insert(cyclingRide3)
+        val rides = dao.getAllRidesInDay(16460892)
+        Truth.assertThat(rides).isEqualTo(listOf(CyclingRide(22f, 60, 1646089204000, destination = "A", rideId = 1),
+            CyclingRide(11f, 60, 1646089200100, destination = "A", rideId = 2)))
+    }
+
+    @Test
+    fun getDistinctAllActiveDays() = runBlockingTest {
+        val cyclingRide = CyclingRide(22f, 60, 1613749194969, destination = "A")
+        val cyclingRide2 = CyclingRide(11f, 60, 1646089200100, destination = "A")
+        val cyclingRide3 = CyclingRide(22f, 20, 1613640406126, destination = "B")
+        dao.insert(cyclingRide)
+        dao.insert(cyclingRide2)
+        dao.insert(cyclingRide3)
+        val days = dao.getDistinctAllActiveDays().getOrAwaitValue()
+        Truth.assertThat(days).isEqualTo(listOf("2021-02-19", "2022-02-28", "2021-02-18"))
+    }
+
 }

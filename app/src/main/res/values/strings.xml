@@ -55,5 +55,8 @@
     <string name="days">days</string>
     <string name="active_days">Active days</string>
     <string name="img_cycling_img_desc">screenshot from tracking fragment</string>
+    <string name="no_rides">No rides od this day</string>
+    <string name="confirm_delete">Do you really want to delete this ride?</string>
+    <string name="confirm_delete_title">Confirm delete</string>
 
 </resources>
