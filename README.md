@@ -32,27 +32,41 @@ App is organized in MVVM structure (Entity -> DAO -> Repository -> ViewModel -> 
 
 #### 1. Main Activity
 
+
+<img src="/screenshots/main_activity.png" width="200">
+
 This is opening activity. From here user might choose sport or open SettingActivity.
 
 #### 2. SettingsMain Activity
+
+<img src="/screenshots/global_settings.png" width="200">
 
 Location update period might be changed here, in order to improve tracking precision (shorter period) or save battery (longer period). Information about it is stored with DataStore.
 
 #### 3. Cycling Activity
 
+<img src="/screenshots/drawer.png" width="200">
+
 This is Navigation Drawer Activity with 3 fragments: MapFragment, AddRide (manually) and Statistics.
 
 #### 3.1 Map Fragment
+
+<img src="/screenshots/map_tracking.png" width="200">
 
 Google Map is used to draw track. User is able to stop tracking with or without saving to database. If user decides to save it, then screenshot of map with drawn track is taken and MaterialAlertDialog (with custom layout) is shown, asking user to input training destination. Also, when tracking is started, Foreground Service is launched, so it is not neccessary for app to be open all time - tracking will continue even if app is in background and/or screen is turned off.
 
 #### 3.2 AddRide Fragment
 
+<img src="/screenshots/add_manually.png" width="200">
+
 From here it is possible to add ride manually in case it was not done with usage of app's tracking service. There is DatePickerDialog to choose a date of ride, but only past dates (including today) are valid to choose :wink:
 
 #### 3.3 Statistics Fragment
 
+<img src="/screenshots/stats1.png" width="200"> <img src="/screenshots/stats2.png" width="200"> <img src="/screenshots/stats_3.png" width="200">
+
 In this fragment there are multiple sections. First - overall - distance, avg. speed, duration, most frequent destination based on all tracks in database. Second - information from each year. They are displayed in recyclerView. Thanks to this section it is easy to see if you made progress since last year, check number of active days and feel like true sportsperson :smile: . Then there is last section - displaying information about each day. User is able to pick a date in DatePicker and information about this date will be displayed in recyclerView below. However it might be quite annoying to search previous day when training was performed , so I added buttons to jump from day to day (list of active days), so all user has to do is just click on them and next/previous day with at least 1 training will be set. Each item in this recyclerView has button, which allows user to delete this ride - in case it was e.g. added accidentally.
+Please mind, that these tracks ons creenshots were simulated, so values of speed, distance and time are not real.
 
 ## Forground Service
 
