@@ -63,7 +63,7 @@ From here it is possible to add ride manually in case it was not done with usage
 
 #### 3.3 Statistics Fragment
 
-<img src="/screenshots/stats1.png" width="200"> <img src="/screenshots/stats2.png" width="200"> <img src="/screenshots/stats_3.png" width="200">
+<img src="/screenshots/stats1.png" width="200"> <img src="/screenshots/stats2.png" width="200"> <img src="/screenshots/stats_3.png" width="200" height="356">
 
 In this fragment there are multiple sections. First - overall - distance, avg. speed, duration, most frequent destination based on all tracks in database. Second - information from each year. They are displayed in recyclerView. Thanks to this section it is easy to see if you made progress since last year, check number of active days and feel like true sportsperson :smile: . Then there is last section - displaying information about each day. User is able to pick a date in DatePicker and information about this date will be displayed in recyclerView below. However it might be quite annoying to search previous day when training was performed , so I added buttons to jump from day to day (list of active days), so all user has to do is just click on them and next/previous day with at least 1 training will be set. Each item in this recyclerView has button, which allows user to delete this ride - in case it was e.g. added accidentally.
 Please mind, that these tracks ons creenshots were simulated, so values of speed, distance and time are not real.
