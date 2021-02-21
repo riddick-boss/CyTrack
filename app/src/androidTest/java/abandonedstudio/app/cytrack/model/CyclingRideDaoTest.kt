@@ -87,10 +87,15 @@ class CyclingRideDaoTest {
 
     @Test
     fun getYears() = runBlockingTest {
-        val cyclingRide = CyclingRide(22f, 60, 1646089200000)
+        val cyclingRide = CyclingRide(22f, 60, 1613749194969, destination = "A")
+        val cyclingRide2 = CyclingRide(11f, 60, 1546383600000, destination = "A")
+        val cyclingRide3 = CyclingRide(22f, 20, 1646089200100, destination = "B")
         dao.insert(cyclingRide)
-        val years = dao.getDistinctYears()
-        Truth.assertThat(years).isEqualTo(listOf(2022))
+        dao.insert(cyclingRide2)
+        dao.insert(cyclingRide3)
+        val years = dao.getDistinctYears().toMutableList()
+        years.sortDescending()
+        Truth.assertThat(years).isEqualTo(listOf(2022, 2021, 2019))
     }
 
     @Test

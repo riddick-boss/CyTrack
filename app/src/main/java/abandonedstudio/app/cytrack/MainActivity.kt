@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(Intent(this, CyclingActivity::class.java))
             }
             R.id.running_choose_sport_cardView->{
-                // TODO: add start activity running
+                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show()
             }
             R.id.settings_imageButton -> {
                 startActivity(Intent(this, SettingsMainActivity::class.java))

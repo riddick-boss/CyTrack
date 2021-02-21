@@ -10,18 +10,21 @@ import abandonedstudio.app.cytrack.utils.Constants.ACTION_START_OR_RESUME_TRACKI
 import abandonedstudio.app.cytrack.utils.Constants.LOCATION_PERMISSION_REQUEST_CODE
 import abandonedstudio.app.cytrack.utils.Constants.MAP_ZOOM
 import abandonedstudio.app.cytrack.utils.Constants.POLYLINE_WIDTH_ON_MAP
+import abandonedstudio.app.cytrack.utils.ConvertersUI
 import abandonedstudio.app.cytrack.utils.TrackingUtil
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
+import androidx.core.location.LocationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -30,6 +33,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -72,7 +76,11 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
 
 //        start/resume/pause tracking
         binding.startStopButton.setOnClickListener {
-            toggleTracking()
+            if (isLocationEnabled(requireContext())){
+                toggleTracking()
+            } else{
+                Snackbar.make(requireView(), "Turn on location!", Snackbar.LENGTH_SHORT).show()
+            }
         }
 
         binding.finishButton.setOnClickListener {
@@ -160,6 +168,12 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
         }
     }
 
+//    check if location is turned on
+    private fun isLocationEnabled(context: Context): Boolean{
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return LocationManagerCompat.isLocationEnabled(locationManager)
+    }
+
 //    updating UI elements
     private fun toggleUI(isTracking: Boolean){
         this.isTrackingNow = isTracking
@@ -224,11 +238,7 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
                     deliverActionToService(ACTION_END_TRACKING_SERVICE)
                     map?.clear()
                     pathPoints.clear()
-                    Toast.makeText(
-                        requireContext(),
-                        "Saved successfully",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(requireView(), "Remember to turn off location", Snackbar.LENGTH_SHORT).show()
                 }.show()
         }
     }
@@ -247,6 +257,7 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
                     deliverActionToService(ACTION_END_TRACKING_SERVICE)
                     map?.clear()
                     pathPoints.clear()
+                    Snackbar.make(requireView(), "Remember to turn off location", Snackbar.LENGTH_SHORT).show()
                 }.show()
         }
     }
@@ -284,7 +295,7 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
         })
 
         TrackingService.trainingTimeInMinutes.observe(viewLifecycleOwner, {
-            binding.durationTextView.text = TrackingUtil.formatTimeInMinutes(it)
+            binding.durationTextView.text = ConvertersUI.formatTimeFromMinutes(it)
         })
     }
 

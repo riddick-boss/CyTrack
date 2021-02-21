@@ -4,7 +4,6 @@ import abandonedstudio.app.cytrack.databinding.CyclingStatsFragmentBinding
 import abandonedstudio.app.cytrack.model.CyclingRide
 import abandonedstudio.app.cytrack.utils.ConvertersUI
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -83,41 +81,41 @@ class CyclingStatsFragment: Fragment(), StatsDayAdapter.OnDeleteItemListener {
             }
         })
 
+//        list of dates of active days - used to jump from day to day in date picker
         viewModel.activeDays.observe(viewLifecycleOwner, {
             allActiveDays = it.toMutableList()
-            Log.d("lista", "1" + allActiveDays.toString())
             allActiveDays.sort()
-            Log.d("lista", "2" + allActiveDays.toString())
-            currentIndex = allActiveDays.lastIndex
-            Log.d("lista", "3 " + allActiveDays.lastIndex.toString())
+            if (!allActiveDays.isNullOrEmpty()){
+                currentIndex = allActiveDays.lastIndex
+
+            }
         })
 
         binding.nextActiveDayImageButton.setOnClickListener {
-            var date = listOf<String>()
-            if (currentIndex==allActiveDays.lastIndex){
-                Toast.makeText(requireContext(), "That's latest active day", Toast.LENGTH_SHORT).show()
-            } else{
-                currentIndex +=1
-            }
             if (!allActiveDays.isNullOrEmpty()){
-                date = allActiveDays[currentIndex].split("-")
+                if (currentIndex==allActiveDays.lastIndex){
+                    Toast.makeText(requireContext(), "That's latest active day", Toast.LENGTH_SHORT).show()
+                } else{
+                    currentIndex +=1
+                }
+                val date = allActiveDays[currentIndex].split("-")
+                binding.cyclingStatsDatePicker.updateDate(date[0].toInt(), date[1].toInt()-1, date[2].toInt())
             }
-            binding.cyclingStatsDatePicker.updateDate(date[0].toInt(), date[1].toInt()-1, date[2].toInt())
         }
 
         binding.prevActiveDayImageButton.setOnClickListener {
-            var date = listOf<String>()
-            if (currentIndex==0){
-                Toast.makeText(requireContext(), "That's first ever active day", Toast.LENGTH_SHORT).show()
-            } else{
-                currentIndex -=1
-            }
             if (!allActiveDays.isNullOrEmpty()){
-                date = allActiveDays[currentIndex].split("-")
+                if (currentIndex==0){
+                    Toast.makeText(requireContext(), "That's first ever active day", Toast.LENGTH_SHORT).show()
+                } else{
+                    currentIndex -=1
+                }
+                val date = allActiveDays[currentIndex].split("-")
+                binding.cyclingStatsDatePicker.updateDate(date[0].toInt(), date[1].toInt()-1, date[2].toInt())
             }
-            binding.cyclingStatsDatePicker.updateDate(date[0].toInt(), date[1].toInt()-1, date[2].toInt())
         }
 
+//        updating years RV in case of changes in db
         viewModel.rows.observe(viewLifecycleOwner, {
             setupListsForYearsRV()
             yearAdapter.submitLists(
@@ -162,6 +160,7 @@ class CyclingStatsFragment: Fragment(), StatsDayAdapter.OnDeleteItemListener {
         destinationsList.clear()
         activeDaysListInYear.clear()
         yearsList = viewModel.getDistinctYears().toMutableList()
+        yearsList.sortDescending()
         for (year in yearsList){
             totalTimeList.add(viewModel.getTotalTimeInYear(year))
             totalDistanceList.add(viewModel.getTotalDistanceInYear(year))

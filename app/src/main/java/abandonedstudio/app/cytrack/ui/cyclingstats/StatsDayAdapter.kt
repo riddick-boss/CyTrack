@@ -50,6 +50,7 @@ class StatsDayAdapter : RecyclerView.Adapter<StatsDayAdapter.StatsDayViewHolder>
                     listener.delete(ride)
                     ridesInDayList.removeAt(position)
                     notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, ridesInDayList.size)
                 }.show()
         }
     }
@@ -58,6 +59,7 @@ class StatsDayAdapter : RecyclerView.Adapter<StatsDayAdapter.StatsDayViewHolder>
         return ridesInDayList.size
     }
 
+//    passing CyclingRide to CyclingStatsFragment and deleting it from there (viewModel)
     interface OnDeleteItemListener{
         fun delete(ride: CyclingRide)
     }

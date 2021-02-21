@@ -84,7 +84,7 @@ class CyclingAddRideFragment : Fragment() {
                     binding.cyclingAddDistanceEditText.error = "Required"
                 }
                 binding.cyclingAddDestinationEditText.editText?.text.isNullOrEmpty() -> {
-                    binding.cyclingAddDistanceEditText.error = "Required"
+                    binding.cyclingAddDestinationEditText.error = "Required"
                 }
 //                preventing to add ride with ride time 00:00 because it's impossible and will affect avg speed value
                 binding.cyclingAddHoursNumberPicker.value==0 && binding.cyclingAddMinsNumberPicker.value==0 -> {
@@ -104,7 +104,6 @@ class CyclingAddRideFragment : Fragment() {
                             dialog.dismiss()
                         }
                         .setPositiveButton(resources.getString(R.string.ok)) { _, _ ->
-//                            val bitmap = BitmapFactory.decodeResource(requireContext().resources, R.drawable.main_background)
                             viewModel.insert(CyclingRide(distance, duration, rideDate, destination))
                             Toast.makeText(
                                 requireContext(),
@@ -138,7 +137,7 @@ class CyclingAddRideFragment : Fragment() {
         binding.cyclingAddMinsNumberPicker.value = 0
     }
 
-    private fun dateFormatting(milis: Long): String{
-        return SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(milis)
+    private fun dateFormatting(millis: Long): String{
+        return SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(millis)
     }
 }

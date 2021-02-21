@@ -40,16 +40,6 @@ object TrackingUtil {
         notificationManager.createNotificationChannel(channel)
     }
 
-//    fun formatTime(milliseconds: Long): String {
-//        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)%60
-//        val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)
-//        return "${hours}:${String.format("%02d",minutes)}"
-//    }
-
-    fun formatTimeInMinutes(minutes: Int): String{
-        return "${minutes/60}:${String.format("%02d",minutes%60)}"
-    }
-
     fun calculateDistance(sets: MutableList<MutableList<LatLng>>): Float{
         var distance = 0f
         for (set in sets){

@@ -15,6 +15,7 @@ import abandonedstudio.app.cytrack.utils.Constants.THREE_SEC_LOCATION_UPDATE_PER
 import abandonedstudio.app.cytrack.utils.Constants.TRACKING_NOTIFICATION_ID
 import abandonedstudio.app.cytrack.utils.Constants.TWELVE_SEC_LOCATION_UPDATE_PERIOD
 import abandonedstudio.app.cytrack.utils.Constants.TWELVE_SEC_LOCATION_UPDATE_PERIOD_DS
+import abandonedstudio.app.cytrack.utils.ConvertersUI
 import abandonedstudio.app.cytrack.utils.TrackingUtil
 import android.annotation.SuppressLint
 import android.app.NotificationManager
@@ -253,7 +254,7 @@ class TrackingService: LifecycleService() {
         trainingTimeInMinutes.observe(this, {
             if (!isServiceKilled){
                 val notification = updatedNotificationBuilder
-                    .setContentText(TrackingUtil.formatTimeInMinutes(it))
+                    .setContentText(ConvertersUI.formatTimeFromMinutes(it))
                 notificationManager.notify(TRACKING_NOTIFICATION_ID, notification.build())
             }
         })
