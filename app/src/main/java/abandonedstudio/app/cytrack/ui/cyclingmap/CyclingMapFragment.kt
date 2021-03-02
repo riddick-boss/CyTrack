@@ -212,34 +212,50 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
     private fun endTrackingAndSave(){
         zoomToWholeTrack()
         deliverActionToService(ACTION_PAUSE_TRACKING_SERVICE)
-        map?.snapshot {
-            val distanceInKm = (TrackingUtil.calculateDistance(pathPoints) / 10).roundToInt() /100f
-            val date = System.currentTimeMillis()
-            var duration = TrackingService.trainingTimeInMinutes.value ?: 1
-//            setting duration as at least 1 -> 0 will cause errors whit calculating avg speed (div by 0)
-            if (duration < 1) {
-                duration = 1
-            }
-            val view = View.inflate(requireContext(), R.layout.cycling_map_destination_dialog, null) as View
-            MaterialAlertDialogBuilder(requireContext())
-                .setView(view)
-                .setNeutralButton(resources.getString(R.string.cancel)){ dialog, _ ->
-                    dialog.dismiss()
+        val mapDialog = MapLoadingDialog.createDialog(requireContext())
+        mapDialog.show()
+
+        map?.setOnMapLoadedCallback {
+            map?.snapshot {
+                mapDialog.dismiss()
+                val distanceInKm = (TrackingUtil.calculateDistance(pathPoints) / 10).roundToInt() / 100f
+                val date = System.currentTimeMillis()
+                var duration = TrackingService.trainingTimeInMinutes.value ?: 1
+                //            setting duration as at least 1 -> 0 will cause errors whit calculating avg speed (div by 0)
+                if (duration < 1) {
+                    duration = 1
                 }
-                .setPositiveButton(R.string.ok){ _, _ ->
-                    // prevent adding empty string and nullPointerException
-                    var destination = view.findViewById<EditText>(R.id.destination_editText)?.text?.toString()
-                        ?.trim()
-                        ?: "Mysterious"
-                    if (destination.isEmpty()){
-                        destination = "Mysterious"
+                val view = View.inflate(
+                    requireContext(),
+                    R.layout.cycling_map_destination_dialog,
+                    null
+                ) as View
+                MaterialAlertDialogBuilder(requireContext())
+                    .setView(view)
+                    .setNeutralButton(resources.getString(R.string.cancel)) { dialog, _ ->
+                        dialog.dismiss()
                     }
-                    viewModel.insert(CyclingRide(distanceInKm, duration, date, destination, it))
-                    deliverActionToService(ACTION_END_TRACKING_SERVICE)
-                    map?.clear()
-                    pathPoints.clear()
-                    Snackbar.make(requireView(), "Remember to turn off location", Snackbar.LENGTH_SHORT).show()
-                }.show()
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        // prevent adding empty string and nullPointerException
+                        var destination =
+                            view.findViewById<EditText>(R.id.destination_editText)?.text?.toString()
+                                ?.trim()
+                                ?: "Mysterious"
+                        if (destination.isEmpty()) {
+                            destination = "Mysterious"
+                        }
+                        viewModel.insert(CyclingRide(distanceInKm, duration, date, destination, it))
+                        deliverActionToService(ACTION_END_TRACKING_SERVICE)
+                        map?.clear()
+                        pathPoints.clear()
+                        Snackbar.make(
+                            requireView(),
+                            "Remember to turn off location",
+                            Snackbar.LENGTH_SHORT
+                        )
+                            .show()
+                    }.show()
+            }
         }
     }
 

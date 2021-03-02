@@ -172,7 +172,9 @@ class CyclingStatsFragment: Fragment(), StatsDayAdapter.OnDeleteItemListener {
     private fun setupDaysRV() = binding.ridesInDayRecyclerView.apply{
         dayAdapter = StatsDayAdapter()
         adapter = dayAdapter
-        layoutManager = LinearLayoutManager(requireContext())
+        layoutManager = LinearLayoutManager(requireContext()).apply {
+            orientation = LinearLayoutManager.VERTICAL
+        }
     }
 
     private fun setupListForDaysRV(milliseconds: Long){

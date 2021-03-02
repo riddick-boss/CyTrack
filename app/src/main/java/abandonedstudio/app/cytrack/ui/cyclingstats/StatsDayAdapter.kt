@@ -32,7 +32,7 @@ class StatsDayAdapter : RecyclerView.Adapter<StatsDayAdapter.StatsDayViewHolder>
     }
 
     override fun onBindViewHolder(holder: StatsDayAdapter.StatsDayViewHolder, position: Int) {
-        val ride = ridesInDayList[position]
+        val ride = ridesInDayList[holder.adapterPosition]
         holder.binding.avgSpeedRideItemTextView.text = ConvertersUI.formatAvgSpeed((ride.distance/ride.duration)*60)
         holder.binding.durationRideItemTextView.text = ConvertersUI.formatTimeFromMinutes(ride.duration)
         holder.binding.distanceRideItemTextView.text = ConvertersUI.formatDistance(ride.distance)
@@ -48,9 +48,9 @@ class StatsDayAdapter : RecyclerView.Adapter<StatsDayAdapter.StatsDayViewHolder>
                 }
                 .setPositiveButton(R.string.ok){ _, _ ->
                     listener.delete(ride)
-                    ridesInDayList.removeAt(position)
-                    notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, ridesInDayList.size)
+                    ridesInDayList.removeAt(holder.adapterPosition)
+                    notifyItemRemoved(holder.adapterPosition)
+                    notifyItemRangeChanged(holder.adapterPosition, ridesInDayList.size)
                 }.show()
         }
     }

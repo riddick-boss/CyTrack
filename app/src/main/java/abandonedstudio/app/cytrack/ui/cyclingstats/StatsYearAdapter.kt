@@ -33,12 +33,12 @@ class StatsYearAdapter : RecyclerView.Adapter<StatsYearAdapter.StatsYearViewHold
     }
 
     override fun onBindViewHolder(holder: StatsYearViewHolder, position: Int) {
-        val year = yearsList[position]
-        val totalTime = totalTimeList[position]
-        val totalDistance = totalDistanceList[position]
+        val year = yearsList[holder.adapterPosition]
+        val totalTime = totalTimeList[holder.adapterPosition]
+        val totalDistance = totalDistanceList[holder.adapterPosition]
         val avgSpeed = (totalDistance/totalTime)*60
-        val destination = destinationsList[position]
-        val activeDays = activeDaysList[position]
+        val destination = destinationsList[holder.adapterPosition]
+        val activeDays = activeDaysList[holder.adapterPosition]
 
         holder.itemView.apply {
             holder.binding.yearTextView.text = "$year"

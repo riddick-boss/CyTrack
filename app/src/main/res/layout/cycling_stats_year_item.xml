@@ -33,12 +33,10 @@
             style="@style/BlackTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:text="@string/total_time_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/distance_cycling_year_item_textView"
+            app:layout_constraintEnd_toEndOf="@+id/textView16"
+            app:layout_constraintStart_toStartOf="@+id/textView16"
             app:layout_constraintTop_toBottomOf="@+id/year_textView" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -47,9 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/total_distance_content"
-            app:layout_constraintEnd_toStartOf="@+id/duration_cycling_year_item_textView"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/avg_speed_cycling_year_item_textView"
+            app:layout_constraintEnd_toEndOf="@+id/textView15"
+            app:layout_constraintStart_toStartOf="@+id/textView15"
             app:layout_constraintTop_toTopOf="@+id/duration_cycling_year_item_textView" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -58,10 +55,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/avg_speed_content"
-            app:layout_constraintEnd_toStartOf="@+id/distance_cycling_year_item_textView"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textView14"
+            app:layout_constraintStart_toStartOf="@+id/textView14"
             app:layout_constraintTop_toTopOf="@+id/distance_cycling_year_item_textView" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -71,9 +66,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/destination"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/active_days_cycling_item_textView"
+            app:layout_constraintEnd_toEndOf="@+id/textView17"
+            app:layout_constraintStart_toStartOf="@+id/textView17"
             app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -83,8 +77,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/avg_speed_title"
-            app:layout_constraintEnd_toEndOf="@+id/avg_speed_cycling_year_item_textView"
-            app:layout_constraintStart_toStartOf="@+id/avg_speed_cycling_year_item_textView"
+            app:layout_constraintEnd_toStartOf="@+id/textView15"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/avg_speed_cycling_year_item_textView" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -93,9 +88,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/total_distance_title"
-            app:layout_constraintEnd_toEndOf="@+id/distance_cycling_year_item_textView"
-            app:layout_constraintHorizontal_bias="0.333"
-            app:layout_constraintStart_toStartOf="@+id/distance_cycling_year_item_textView"
+            app:layout_constraintEnd_toStartOf="@+id/textView16"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView14"
             app:layout_constraintTop_toTopOf="@+id/textView14" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -105,8 +100,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/total_time_title"
-            app:layout_constraintEnd_toEndOf="@+id/duration_cycling_year_item_textView"
-            app:layout_constraintStart_toStartOf="@+id/duration_cycling_year_item_textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView15"
             app:layout_constraintTop_toBottomOf="@+id/duration_cycling_year_item_textView" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -116,8 +112,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/destination"
-            app:layout_constraintEnd_toEndOf="@+id/most_freq_dest_cycling_year_item_textView"
-            app:layout_constraintStart_toStartOf="@+id/most_freq_dest_cycling_year_item_textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView19"
             app:layout_constraintTop_toBottomOf="@+id/most_freq_dest_cycling_year_item_textView" />
 
         <View
@@ -134,10 +131,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/days"
-            app:layout_constraintEnd_toStartOf="@+id/most_freq_dest_cycling_year_item_textView"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textView19"
+            app:layout_constraintStart_toStartOf="@+id/textView19"
             app:layout_constraintTop_toTopOf="@+id/most_freq_dest_cycling_year_item_textView" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -146,8 +141,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/active_days"
-            app:layout_constraintEnd_toEndOf="@+id/active_days_cycling_item_textView"
-            app:layout_constraintStart_toStartOf="@+id/active_days_cycling_item_textView"
+            app:layout_constraintEnd_toStartOf="@+id/textView17"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView17" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

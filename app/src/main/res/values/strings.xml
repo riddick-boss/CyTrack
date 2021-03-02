@@ -58,5 +58,6 @@
     <string name="no_rides">No rides od this day</string>
     <string name="confirm_delete">Do you really want to delete this ride?</string>
     <string name="confirm_delete_title">Confirm delete</string>
+    <string name="loading_map">Loading map</string>
 
 </resources>

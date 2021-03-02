@@ -63,7 +63,7 @@ class TrackingService: LifecycleService() {
     private var isServiceKilled = false
 
 //    private val trainingTimeInMinutes= MutableLiveData<Long>()
-    private val trainingTimeInMilis = MutableLiveData<Long>()
+    private val trainingTimeInMillis = MutableLiveData<Long>()
     private var lapTime = 0L
     private var startTime = 0L
     private var totalTime = 0L
@@ -153,7 +153,7 @@ class TrackingService: LifecycleService() {
         isTrackingActive.postValue(false)
         pathCoordinates.postValue(mutableListOf())
         trainingTimeInMinutes.postValue(0)
-        trainingTimeInMilis.postValue(0L)
+        trainingTimeInMillis.postValue(0L)
     }
 
 //    after resuming tracking it is needed to add new empty list at the end for next part of training path coordinates
@@ -175,10 +175,10 @@ class TrackingService: LifecycleService() {
 
 //    retrieving location coordinates (changes)
     private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(result: LocationResult?) {
+        override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
             if (isTrackingActive.value!!){
-                result?.locations?.let {
+                result.locations.let {
                     for (location in it){
                         addPathPoint(location)
                     }
@@ -230,9 +230,9 @@ class TrackingService: LifecycleService() {
         CoroutineScope(Dispatchers.Main).launch {
             while (isTrackingActive.value!!){
                 lapTime = System.currentTimeMillis() - startTime
-                trainingTimeInMilis.postValue(totalTime + lapTime)
+                trainingTimeInMillis.postValue(totalTime + lapTime)
 //                checking if next whole minute has passed - if true updating notification
-                if (trainingTimeInMilis.value!! >= minuteTimestamp + 60000L){
+                if (trainingTimeInMillis.value!! >= minuteTimestamp + 60000L){
                     trainingTimeInMinutes.postValue(trainingTimeInMinutes.value!! + 1)
                     minuteTimestamp += 60000L
                 }

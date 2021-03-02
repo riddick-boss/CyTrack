@@ -20,7 +20,9 @@
         <activity
             android:name=".CyclingActivity"
             android:label="@string/title_activity_cycling"
-            android:theme="@style/MyAppTheme.NoActionBar" >
+            android:theme="@style/MyAppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity
             android:name=".ui.settingsmain.SettingsMainActivity"

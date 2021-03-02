@@ -124,15 +124,15 @@ class CyclingRideDaoTest {
     fun getMostFrequentDestinationInYearTest() = runBlockingTest {
         val cyclingRide = CyclingRide(22f, 60, 1646089200000, destination = "A")
         val cyclingRide2 = CyclingRide(11f, 60, 1646089200000, destination = "A")
-        val cyclingRide3 = CyclingRide(22f, 20, 1613640406126, destination = "B")
-        val cyclingRide4 = CyclingRide(22f, 20, 1613640406126, destination = "B")
+        val cyclingRide3 = CyclingRide(22f, 20, 1646089200100, destination = "B")
+        val cyclingRide4 = CyclingRide(22f, 20, 1646089200010, destination = "B")
         val cyclingRide5 = CyclingRide(22f, 60, 1646089200000, destination = "B")
         dao.insert(cyclingRide)
         dao.insert(cyclingRide2)
         dao.insert(cyclingRide3)
         dao.insert(cyclingRide4)
         dao.insert(cyclingRide5)
-        val dest = dao.getMostFrequentDestinationInYear(2021)
+        val dest = dao.getMostFrequentDestinationInYear(2022)
         Truth.assertThat(dest).isEqualTo("B")
     }
 
@@ -161,6 +161,25 @@ class CyclingRideDaoTest {
         val rides = dao.getAllRidesInDay(16460892)
         Truth.assertThat(rides).isEqualTo(listOf(CyclingRide(22f, 60, 1646089204000, destination = "A", rideId = 1),
             CyclingRide(11f, 60, 1646089200100, destination = "A", rideId = 2)))
+    }
+
+
+    @Test
+    fun getDistinctDestination() = runBlockingTest{
+        val cyclingRide = CyclingRide(22f, 60, 1646089204000, destination = "B")
+        val cyclingRide2 = CyclingRide(11f, 60, 1646089200100, destination = "a")
+        val cyclingRide3 = CyclingRide(22f, 20, 1613640406126, destination = "a")
+        val cyclingRide4 = CyclingRide(22f, 60, 1646089204000, destination = "a")
+        val cyclingRide5 = CyclingRide(11f, 60, 1646089200100, destination = "A")
+        val cyclingRide6 = CyclingRide(22f, 20, 1613640406126, destination = "B")
+        dao.insert(cyclingRide)
+        dao.insert(cyclingRide2)
+        dao.insert(cyclingRide3)
+        dao.insert(cyclingRide4)
+        dao.insert(cyclingRide5)
+        dao.insert(cyclingRide6)
+        val dest = dao.getDistinctDestinations().getOrAwaitValue()
+        Truth.assertThat(dest).isEqualTo(listOf("A", "B"))
     }
 
     @Test

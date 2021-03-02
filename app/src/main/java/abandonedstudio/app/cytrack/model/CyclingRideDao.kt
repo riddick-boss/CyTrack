@@ -2,7 +2,6 @@ package abandonedstudio.app.cytrack.model
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import java.util.*
 
 @Dao
 interface CyclingRideDao {
@@ -13,7 +12,7 @@ interface CyclingRideDao {
     @Delete
     suspend fun delete(cyclingRide: CyclingRide)
 
-    @Query("SELECT DISTINCT UPPER(destination) FROM cycling_rides")
+    @Query("SELECT UPPER(destination) FROM cycling_rides GROUP BY UPPER(destination) ORDER BY COUNT(*) DESC")
     fun getDistinctDestinations(): LiveData<List<String>>
 
     @Query("SELECT SUM(duration) FROM cycling_rides")
@@ -43,7 +42,7 @@ interface CyclingRideDao {
     @Query("SELECT SUM(distance_in_km) FROM cycling_rides WHERE CAST(strftime('%Y', date / 1000, 'unixepoch') as integer) = :year")
     suspend fun getTotalDistanceInYear(year: Int): Float
 
-    @Query("SELECT DISTINCT UPPER(destination) FROM cycling_rides WHERE CAST(strftime('%Y', date / 1000, 'unixepoch') as integer) = :year LIMIT 1")
+    @Query("SELECT UPPER(destination) FROM cycling_rides WHERE CAST(strftime('%Y', date / 1000, 'unixepoch') as integer) = :year GROUP BY UPPER(destination) ORDER BY COUNT(*) DESC LIMIT 1")
     suspend fun getMostFrequentDestinationInYear(year: Int): String
 
     @Query("SELECT COUNT(DISTINCT strftime('%j', date / 1000, 'unixepoch')) FROM cycling_rides WHERE CAST(strftime('%Y', date / 1000, 'unixepoch') as integer) = :year")
