@@ -26,10 +26,8 @@ import android.content.Intent
 import android.location.Location
 import android.os.Looper
 import androidx.core.app.NotificationCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.createDataStore
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -55,7 +53,7 @@ class TrackingService: LifecycleService() {
 
     private lateinit var updatedNotificationBuilder: NotificationCompat.Builder
 
-    private lateinit var dataStore: DataStore<Preferences>
+    private val Context.dataStore by preferencesDataStore(name = "global_settings")
 
 //    this is to check if user has started completely new training or if he is continuing another (resuming)
     private var isFirstPartOfTraining = true
@@ -88,7 +86,6 @@ class TrackingService: LifecycleService() {
     override fun onCreate() {
         super.onCreate()
 
-        dataStore = createDataStore(name = "global_settings")
 //        if loading async then settings might not be loaded properly
 //        timeout 5s, if not able to access settings -> 3sec period will be set
         runBlocking {
@@ -193,7 +190,7 @@ class TrackingService: LifecycleService() {
     private fun updateTracking(isTracking: Boolean){
         if (isTracking){
             if (TrackingUtil.checkLocationPermissions(this)){
-                val locationRequest = LocationRequest().apply {
+                val locationRequest = LocationRequest.create().apply {
                     interval = locationUpdateInterval
                     fastestInterval = fastestLocationUpdateInterval
                     priority = PRIORITY_HIGH_ACCURACY

@@ -6,14 +6,13 @@ import abandonedstudio.app.cytrack.utils.Constants.LOCATION_UPDATE_PERIOD_KEY
 import abandonedstudio.app.cytrack.utils.Constants.SEVEN_SEC_LOCATION_UPDATE_PERIOD_DS
 import abandonedstudio.app.cytrack.utils.Constants.THREE_SEC_LOCATION_UPDATE_PERIOD_DS
 import abandonedstudio.app.cytrack.utils.Constants.TWELVE_SEC_LOCATION_UPDATE_PERIOD_DS
+import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.createDataStore
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -22,13 +21,12 @@ class SettingsMainActivity : AppCompatActivity() {
 
     private lateinit var binding: SettingsMainBinding
 
-    private lateinit var dataStore: DataStore<Preferences>
+    private val Context.dataStore by preferencesDataStore(name = "global_settings")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SettingsMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        dataStore = createDataStore(name = "global_settings")
 
         loadSavedSettings()
 
