@@ -52,6 +52,6 @@ object ServiceModule {
         .setSmallIcon(R.drawable.ic_baseline_directions_bike_100)
         .setContentTitle(context.getString(R.string.ridding))
         .setContentText(context.getString(R.string.total_time_content))
-        .setContentIntent(pendingIntent)!!
+        .setContentIntent(pendingIntent)
 
 }

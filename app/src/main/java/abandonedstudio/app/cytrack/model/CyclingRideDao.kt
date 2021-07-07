@@ -30,6 +30,9 @@ interface CyclingRideDao {
     @Query("SELECT * FROM cycling_rides")
     fun getAllCyclingRides(): LiveData<List<CyclingRide>>
 
+    @Query("SELECT UPPER(destination) FROM cycling_rides GROUP BY UPPER(destination) ORDER BY COUNT(*) DESC")
+    suspend fun getDistinctDestinationsSynchronously(): List<String>
+
     @Query("SELECT DISTINCT strftime('%Y', date / 1000, 'unixepoch') FROM cycling_rides")
     suspend fun getDistinctYears(): List<Int>
 

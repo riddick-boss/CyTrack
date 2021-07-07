@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -12,8 +13,9 @@
         android:scaleType="center"
         android:text="@string/enter_destination" />
 
-    <EditText
-        android:id="@+id/destination_editText"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/destination_textInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
@@ -23,5 +25,14 @@
         android:gravity="center"
         android:hint="@string/destination"
         android:importantForAutofill="no"
-        android:inputType="textCapSentences" />
+        android:inputType="textCapSentences"
+        android:minWidth="200dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/destination_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            tools:ignore="LabelFor" />
+    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

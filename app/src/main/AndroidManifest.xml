@@ -26,9 +26,10 @@
         </activity>
         <activity
             android:name=".ui.settingsmain.SettingsMainActivity"
-            android:label="@string/main_settings_label" >
+            android:label="@string/main_settings_label"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".MainActivity" android:launchMode="singleTask">
+        <activity android:name=".MainActivity" android:launchMode="singleTask" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

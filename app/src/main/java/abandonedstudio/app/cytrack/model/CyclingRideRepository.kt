@@ -26,6 +26,8 @@ class CyclingRideRepository @Inject constructor(private val cyclingRideDao: Cycl
 
     fun getAvgSpeedKmH() = cyclingRideDao.getAvgSpeedKmH()
 
+    suspend fun getDistinctDestinations() = cyclingRideDao.getDistinctDestinationsSynchronously()
+
     suspend fun getDistinctYears() = cyclingRideDao.getDistinctYears()
 
     suspend fun getTotalTimeRideInYear(year: Int) = cyclingRideDao.getTotalTimeRideInYear(year)

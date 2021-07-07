@@ -23,7 +23,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.core.location.LocationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -217,7 +219,6 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
 
         map?.setOnMapLoadedCallback {
             map?.snapshot {
-                mapDialog.dismiss()
                 val distanceInKm = (TrackingUtil.calculateDistance(pathPoints) / 10).roundToInt() / 100f
                 val date = System.currentTimeMillis()
                 var duration = TrackingService.trainingTimeInMinutes.value ?: 1
@@ -230,17 +231,17 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
                     R.layout.cycling_map_destination_dialog,
                     null
                 ) as View
+                val editText = view.findViewById<TextInputLayout>(R.id.destination_textInputLayout).editText as? AutoCompleteTextView
+                editText?.setAdapter(ArrayAdapter(requireContext(), android.R.layout.select_dialog_item, viewModel.getDistinctDestinations()))
+                mapDialog.dismiss()
                 MaterialAlertDialogBuilder(requireContext())
                     .setView(view)
                     .setNeutralButton(resources.getString(R.string.cancel)) { dialog, _ ->
                         dialog.dismiss()
                     }
-                    .setPositiveButton(R.string.ok) { _, _ ->
+                    .setPositiveButton(resources.getString(R.string.ok)) { _, _ ->
                         // prevent adding empty string and nullPointerException
-                        var destination =
-                            view.findViewById<EditText>(R.id.destination_editText)?.text?.toString()
-                                ?.trim()
-                                ?: "Mysterious"
+                        var destination = editText?.text.toString().trim()
                         if (destination.isEmpty()) {
                             destination = "Mysterious"
                         }
@@ -252,8 +253,7 @@ class CyclingMapFragment: Fragment(), EasyPermissions.PermissionCallbacks {
                             requireView(),
                             "Remember to turn off location",
                             Snackbar.LENGTH_SHORT
-                        )
-                            .show()
+                        ).show()
                     }.show()
             }
         }
